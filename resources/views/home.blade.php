@@ -63,16 +63,16 @@
     @foreach ($posts as $post)
         <div class="col-md-6">
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
+            <div class="col-md-8 p-4 d-flex flex-column position-static">
                 <h3 class="mb-0">{{ $post->title }}</h3>
                 <div class="mb-1 text-muted">{{ $post->created_at->diffForHumans() }}</div>
                 <p class="card-text mb-auto">{{ $post->excerpt }}</p>
                 <a href="/posts/{{ $post->slug }}" class="stretched-link">Continue reading</a>
             </div>
-            <div class="col-auto d-none d-lg-block">
+            <div class="col-md-4 d-none d-lg-block">
                 {{-- <img src="img/image2.jpg" alt="" width="200" height="250"> --}}
                 @if ($post->image)
-                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->category->name }}"  width="200" height="250">
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->category->name }}"  width="auto" height="250">
                 @else
                     <img src="https://source.unsplash.com/500x400?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}">
                 @endif
