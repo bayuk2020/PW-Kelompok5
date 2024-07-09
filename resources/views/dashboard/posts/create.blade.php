@@ -48,7 +48,7 @@
             </div>
             @enderror
           </div>
-          <div class="mb-3">
+          {{-- <div class="mb-3">
             <label for="pdf" class="form-label">Post File PDF</label>
             <input class="form-control @error('pdf') is-invalid @enderror" type="file" id="pdf" name="pdf" onchange="previewImage()">
             @error('pdf')
@@ -56,7 +56,7 @@
                 {{ $message }}
             </div>
             @enderror
-          </div>
+          </div> --}}
         <div class="mb-3">
             <label for="body" class="form-label">Body</label>
             @error('body')

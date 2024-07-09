@@ -43,22 +43,22 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
-        
+        // $dd($request);
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts',
             'category_id' => 'required',
-            'image' => 'image|file|max:1024',
-            'pdf' => 'required|mimes:pdf|max:10000',
+            'image' => 'image|file|max:5024',
+            // 'pdf' => 'required|mimes:pdf|max:10000',
             'body' => 'required'
         ]);
-        
-        if($request->file('image')) {
-            $validatedData['image'] = $request->file('image')->store('post-images');
+
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('post-images', 'public');
         }
-        if($request->file('pdf')) {
-            $validatedData['pdf'] = $request->file('pdf')->store('post-images');
-        }
+        // if ($request->file('pdf')) {
+        //     $validatedData['pdf'] = $request->file('pdf')->store('post-images');
+        // }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
@@ -79,7 +79,6 @@ class DashboardPostController extends Controller
         return view('dashboard.posts.show', [
             'post' => $post
         ]);
-
     }
 
     /**
@@ -91,7 +90,7 @@ class DashboardPostController extends Controller
     public function edit(Post $post)
     {
         return view('dashboard.posts.edit', [
-            'post'=> $post,
+            'post' => $post,
             'categories' => Category::all()
         ]);
     }
@@ -112,17 +111,17 @@ class DashboardPostController extends Controller
             'body' => 'required'
         ]);
 
-        if($request->slug != $post->slug) {
+        if ($request->slug != $post->slug) {
             $rules['slug'] = 'required|unique:posts';
         }
 
         $validatedData = $request->validate($rules);
 
-        if($request->file('image')) {
-            if($request->oldImage){
+        if ($request->file('image')) {
+            if ($request->oldImage) {
                 Storage::delete($request->oldImage);
             }
-            $validatedData['image'] = $request->file('image')->store('post-images');
+            $validatedData['image'] = $request->file('image')->store('post-images', 'public');
         }
 
         $validatedData['user_id'] = auth()->user()->id;
@@ -142,7 +141,7 @@ class DashboardPostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if($post->image){
+        if ($post->image) {
             Storage::delete($post->image);
         }
         Post::destroy($post->id);

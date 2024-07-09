@@ -1,17 +1,115 @@
 
 @extends('layouts.main')
 
+@section('style')
+  <link href="css/carousel.css" rel="stylesheet">
+@endsection
+
 @section('container')
 
-<h1>Halaman Home</h1>
-<p>Selamat Datang</p>
 
-<span>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam ratione voluptatum, error tenetur quibusdam repellendus, necessitatibus sunt harum maxime mollitia dolores temporibus eos reprehenderit quaerat earum ab exercitationem cumque veniam, porro ut adipisci obcaecati fugiat? Quis voluptatem accusamus corrupti dolorem sunt cupiditate, aut id possimus, exercitationem voluptas ut a quod molestiae. Recusandae veniam est mollitia vitae expedita ipsa quo sunt! Minima laudantium maxime molestias praesentium alias dolores error ea fugit harum laboriosam distinctio ullam, earum laborum beatae enim autem aspernatur temporibus asperiores commodi aliquid vero animi esse excepturi at. Similique, 
-    
-    molestiae rem non eligendi, inventore corrupti at ipsa beatae tempora, vitae sapiente saepe sed a repudiandae autem dolorum cupiditate quod. Laborum, sunt. Quidem, dicta? Deserunt blanditiis nesciunt culpa, amet esse, alias pariatur quidem velit repellendus beatae odio molestias impedit ad. Iure voluptatem voluptatum saepe sed placeat doloribus quibusdam tempora quasi perferendis. Velit at tempore, esse iusto nesciunt quia, facilis deleniti vitae quibusdam fugit fugiat perspiciatis voluptas praesentium dolorem! Quae debitis vitae ad neque eveniet voluptatem obcaecati excepturi libero, est cupiditate deleniti facere possimus culpa architecto. Ex, blanditiis ducimus animi inventore, voluptatum sed magnam aperiam quae accusamus ea saepe ab! Dignissimos, a aliquam? Ea saepe sapiente odit sint facere neque cum? 
-    
-    Alias magnam totam beatae maiores, nam iste, laudantium similique est suscipit voluptatem amet ipsa quis impedit ipsam voluptate dolor aut debitis illum itaque. Magni aut ea praesentium nam dolorem libero corrupti aspernatur tempore autem iste, error recusandae sunt unde natus fuga architecto. Quaerat quam commodi impedit nulla aliquam nisi tempore ratione illo quod, nesciunt doloremque provident voluptatum earum sed sequi excepturi similique temporibus fugiat magni! Voluptas ab accusantium debitis consequuntur. Ex eius facilis vel similique neque ad animi itaque perferendis modi autem assumenda, ullam officia obcaecati numquam nostrum. Voluptatum fugit nemo praesentium qui animi dignissimos ad molestias nesciunt amet natus?
-</span>
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="img/banner-food1.png" alt="" style="filter: brightness(50%)">
+
+      <div class="container">
+        <div class="carousel-caption text-start">
+          <h1>Mengungkap Kekayaan Rasa Kuliner Nusantara</h1>
+          <p>adalah upaya kami untuk menyajikan kelezatan autentik Indonesia, menghadirkan resep tradisional, sejarah, dan cerita budaya di balik setiap hidangan, dari Sabang sampai Merauke, dalam satu platform kuliner yang menyeluruh</p>
+          
+        </div>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="img/banner-food2.png" alt=""  style="filter: brightness(50%)">
+      <div class="container">
+        <div class="carousel-caption text-start">
+          <h1>Nikmati Kelezatan Tradisi Kuliner Indonesia</h1>
+          <p>"mengajak Anda menjelajahi ragam hidangan otentik dari berbagai daerah, menelusuri resep turun-temurun dan merasakan kekayaan budaya yang terwujud dalam setiap rasa, di satu platform kuliner yang penuh inspirasi</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="img/banner-food3.png" alt=""  style="filter: brightness(50%)">
+      <div class="container">
+        <div class="carousel-caption text-start">
+          <h1>Dari Dapur Nusantara ke Meja Anda</h1>
+          <p>membawa cita rasa autentik Indonesia langsung ke rumah Anda, dengan resep tradisional, tips memasak, dan kisah budaya di balik setiap hidangan, menghadirkan kekayaan kuliner nusantara dalam setiap sajian..</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<main class="container">
+
+  
+
+<div class="row mb-2">
+    @foreach ($posts as $post)
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <h3 class="mb-0">{{ $post->title }}</h3>
+                <div class="mb-1 text-muted">{{ $post->created_at->diffForHumans() }}</div>
+                <p class="card-text mb-auto">{{ $post->excerpt }}</p>
+                <a href="/posts/{{ $post->slug }}" class="stretched-link">Continue reading</a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+                {{-- <img src="img/image2.jpg" alt="" width="200" height="250"> --}}
+                @if ($post->image)
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->category->name }}"  width="200" height="250">
+                @else
+                    <img src="https://source.unsplash.com/500x400?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}">
+                @endif
+            </div>
+            </div>
+        </div>
+        {{-- <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <h3 class="mb-0">Keutamaan Malam Lailatul Qadar: Momen Paling Berharga di Bulan Ramadan</h3>
+                <div class="mb-1 text-muted">Nov 11</div>
+                <p class="mb-auto">Malam Lailatul Qadar adalah salah satu malam yang paling istimewa dan berharga dalam...</p>
+                <a href="blog3.html" class="stretched-link">Continue reading</a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+                <img src="img/image3.jpg" alt="" width="200" height="250" >
+            </div>
+            </div>
+        </div> --}}
+        @endforeach
+</div>
+
+<div class="row">
+  @foreach ( $categories as $category )
+  {{-- @dd($category) --}}
+  <div class="col-md-3 pt-4">
+    <a href="/posts?category={{ $category->slug }}">
+      <div class="card bg-dark text-white">
+        <img src="{{ asset('storage/' . $category->image) }}" class="card-img" alt="..." height="300" width="200">
+        <div class="card-img-overlay d-flex align-items-center p-0">
+          <h5 class="card-title text-center flex-fill p-4 fs-3" style="background-color: rgba(0,0,0,0.7)">{{ $category->name }}</h5>
+        </div>
+      </div>
+    </a>
+  </div>
+  @endforeach
+</div>
+
 
 @endsection
