@@ -11,6 +11,8 @@
     {{-- Trix Editor --}}
     <link rel="stylesheet" type="text/css" href="/css/trix.css">
     <script type="text/javascript" src="/js/trix.js"></script>
+    {{-- Font Awesome --}}
+    <script src="https://kit.fontawesome.com/c4fc989292.js" crossorigin="anonymous"></script>
 
     <style>
       trix-toolbar [data-trix-button-group="file-tools"]{

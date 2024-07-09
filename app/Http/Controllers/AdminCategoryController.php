@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class AdminCategoryController extends Controller
 {
@@ -15,9 +18,15 @@ class AdminCategoryController extends Controller
     public function index()
     {
         $this->authorize('admin');
-        return view('dashboard.categories.index',[
+        return view('dashboard.categories.index', [
             'categories' => Category::all()
         ]);
+    }
+
+    public function checkSlug(Request $request)
+    {
+        $slug = SlugService::createSlug(Category::class, 'slug', $request->name);
+        return response()->json(['slug' => $slug]);
     }
 
     /**
@@ -38,7 +47,22 @@ class AdminCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('admin');
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'slug' => 'required|max:255',
+            'image' => 'image|file|max:5024'
+        ]);
+
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('category-images', 'public');
+        }
+
+        $validatedData['user_id'] = auth()->user()->id;
+
+        Category::create($validatedData);
+
+        return redirect('dashboard/categories')->with('success', 'New post has been added!');
     }
 
     /**
@@ -60,7 +84,9 @@ class AdminCategoryController extends Controller
      */
     public function edit(category $category)
     {
-        //
+        return view('dashboard.categories.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -72,7 +98,28 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, category $category)
     {
-        //
+        $rules = ([
+            'name' => 'required|max:255',
+            'image' => 'image|file|max:1024'
+        ]);
+
+        if ($request->slug != $category->slug) {
+            $rules['slug'] = 'required|unique:posts';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $validatedData['image'] = $request->file('image')->store('post-images', 'public');
+        }
+
+        Category::where('id', $category->id)
+            ->update($validatedData);
+
+        return redirect('dashboard/categories')->with('success', 'Category has been updated!');
     }
 
     /**
@@ -81,8 +128,14 @@ class AdminCategoryController extends Controller
      * @param  \App\Models\category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(category $category)
+    public function destroy(Request $request)
     {
-        //
+        // dd($request);
+        $this->authorize('admin');
+        if ($request->image) {
+            Storage::delete($request->image);
+        }
+        Category::destroy($request->id);
+        return redirect('dashboard/categories')->with('success', 'Categories has been deleted!');
     }
 }

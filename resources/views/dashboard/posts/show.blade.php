@@ -23,8 +23,6 @@
                 @else
                     <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}" alt="{{ $post->category->name }}" class="img-fluid mt-3">
                 @endif
-
-                <embed class="mt-3" src= "{{ asset('storage/' . $post->pdf)  . '#toolbar=0'}}" width="100%" height="900px">
                 <article class="my-3 fs-5">
                 {!! $post->body !!}
                 </article>
